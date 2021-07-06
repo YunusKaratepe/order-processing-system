@@ -1,3 +1,3 @@
 # Order Processing System
 
-* This project was developed together with Nihat Gulluzade, Leman Valizada and Tarık Can Şahin.
+* This project was developed as a team by me, Nihat Gulluzade, Leman Valizada and Tarık Can Şahin.
