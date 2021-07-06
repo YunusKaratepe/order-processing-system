@@ -1,0 +1,102 @@
+@{
+    ViewData["Title"] = "YBS Order Processing System - Create Order";
+    Order order = ViewBag.Order;
+}
+@using ybs_order_processing_system.Models
+
+<div class="text-center">
+    <h1 class="display-4">Place New Order</h1>
+    <p>Here you can place order on the behalf of the user</p>
+</div>
+
+<form action="CreateOrder" method="post">
+    @Html.AntiForgeryToken()
+    
+    <div class="mb-3">
+        @if (@ViewBag.PlaceStatus != null && @ViewBag.PlaceStatus)
+        {
+            <span class="text-success text-center mb-3" style="display: block; width: 100%">@ViewBag.Message</span>
+            <div class="card border-success m-auto" style="max-width: 18rem;">
+              <div class="card-header">Order details</div>
+              <div class="text-success">
+                  <ul class="list-group list-group-flush">
+                      <li class="list-group-item">Order No: @order.OrderNum</li>
+                      <li class="list-group-item">Product: @order.Product.ProductName</li>
+                      <li class="list-group-item">Buyer: @order.Buyer.BuyerName</li>
+                      <li class="list-group-item">Address: @order.BuyerAddress</li>
+                      <li class="list-group-item">Quantity: @order.ProductQuantity</li>
+                      <li class="list-group-item">Shipping: @order.ShippingPrice</li>
+                      <li class="list-group-item">Total: @order.BilledPrice @order.OrderPaymentType</li>
+                  </ul>
+              </div>
+            </div>
+        }
+        else
+        {
+            <span class="text-danger">@ViewBag.Message</span>
+        }
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">Order Number</label>
+        <input type="text" class="form-control" disabled placeholder="Order number will be generated automatically after you submit the form">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Order Date (Today)</label>
+        <input type="text" class="form-control" disabled placeholder=@DateTime.Today>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Buyer</label>
+        @Html.DropDownList("BuyerId", (List<SelectListItem>) ViewData["Buyers"], htmlAttributes: new {@class = "form-control"})
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Address</label>
+        <input name="BuyerAddress" type="text" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Phone Number</label>
+        <input name="BuyerPhoneNum" type="text" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Arrival Date</label>
+        <input name="OrderArrivalDate" type="text" class="form-control" disabled placeholder="Arrival date will be generated automatically after you submit the form">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Product</label>
+        @Html.DropDownList("ProductId", (List<SelectListItem>) ViewData["Products"], htmlAttributes: new {@class = "form-control"})
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Seller</label>
+        @Html.DropDownList("SellerId", (List<SelectListItem>) ViewData["Sellers"], htmlAttributes: new {@class = "form-control"})
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Quantity</label>
+        <input name="ProductQuantity" type="number" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Shipping Price</label>
+        <input name="ShippingPrice" type="text" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Currency</label>
+        <input name="OrderPaymentType" type="text" class="form-control" placeholder="TL" required>
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">Status</label>
+        <input name="OrderStatus" type="text" class="form-control" placeholder="Not placed" disabled aria-describedby="statusHelp">
+        <small id="statusHelp" class="form-text">Order is not placed currently</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Place Order</button>
+</form>
